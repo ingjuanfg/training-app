@@ -4,19 +4,19 @@ overview: "App web con Next.js + Supabase + Vercel: 2 admins (uno por sede) con 
 todos:
   - id: scaffold
     content: Scaffold Next.js + Tailwind + Supabase + migración/seed (2 sedes, 2 admins)
-    status: in_progress
+    status: completed
   - id: auth
     content: "Auth custom: login usuario/clave y PIN, sesión cookie, middleware admin/viewer"
-    status: pending
+    status: completed
   - id: admin-crud
     content: "Panel admin: crear/editar/eliminar WOD con confirmación, scoped a sede"
-    status: pending
+    status: completed
   - id: display
     content: "Vista lectura TV: pager secciones, tipografía grande, columnas, badge, logout"
-    status: pending
+    status: completed
   - id: tests-deploy
     content: Tests unit/component con umbrales de cobertura + config Vercel
-    status: pending
+    status: completed
 isProject: false
 ---
 

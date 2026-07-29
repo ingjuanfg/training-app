@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Training Board
 
-## Getting Started
+Plataforma para crear y visualizar entrenamientos por sede (admin mobile/laptop + lectura en TV).
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router) + TypeScript + Tailwind
+- Supabase (Postgres)
+- Vercel (deploy)
+
+## Lo que necesitas configurar
+
+### 1. Proyecto Supabase
+
+**Instalación nueva:** ejecuta en el SQL Editor, en orden:
+
+1. [`supabase/migrations/001_schema.sql`](supabase/migrations/001_schema.sql)
+2. [`supabase/seed.sql`](supabase/seed.sql)
+
+**Si ya tenías la versión anterior** (admin ligado a una sede):
+
+1. [`supabase/migrations/002_multi_sede_admins.sql`](supabase/migrations/002_multi_sede_admins.sql)
+2. [`supabase/seed.sql`](supabase/seed.sql) (actualiza admins/PINs)
+
+En **Project Settings → API**, copia:
+
+- Project URL → `NEXT_PUBLIC_SUPABASE_URL`
+- `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (solo servidor)
+
+### 2. Variables de entorno
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variable | Dónde obtenerla |
+|----------|-----------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → `service_role` |
+| `SESSION_SECRET` | String aleatorio ≥ 32 caracteres (`openssl rand -base64 32`) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Credenciales seed (cambiar en producción)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Tipo | Credencial | Acceso |
+|------|------------|--------|
+| Admin | `admin1` / `admin123` | Ambas sedes |
+| Admin | `admin2` / `admin123` | Ambas sedes |
+| PIN TV | `1111` | Dumbbell Club |
+| PIN TV | `2222` | Personal Box |
 
-## Learn More
+- **Usuario + clave** → panel admin (crea/edita WODs para una o ambas sedes)
+- **PIN** → vista TV del día de esa sede (nombre + logo)
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Desarrollo local
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Tests
 
-## Deploy on Vercel
+```bash
+npm test
+npm run test:coverage
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 6. Deploy en Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mismas 3 variables de entorno en el dashboard de Vercel.
+
+## Flujos
+
+- **Crear:** elige sedes (Dumbbell Club, Personal Box o ambas) → una copia por sede.
+- **Lista:** resumen por fecha (`Dumbbell Club + Personal Box (iguales|distintos)` o `Solo …`).
+- **Editar:** entras por una sede (origen) y eliges el alcance de la edición.
+- **Eliminar:** eliges a qué sedes aplicar el borrado.
+- **Lectura:** WOD del día (`America/Bogota`), pager por sección, tipografía TV, columnas equilibradas, secciones activas, logout.
