@@ -1,8 +1,8 @@
 -- Seed: 2 sedes (PIN por sede) + 2 admins (ambos gestionan ambas sedes)
--- Credenciales por defecto (cámbialas en producción):
---   Admins: admin1 / admin123  ·  admin2 / admin123
---   PIN Dumbbell Club: 1111
---   PIN Personal Box: 2222
+-- Credenciales:
+--   Admins: personal / personal2026  ·  dumbell / dumbell2026
+--   PIN Personal Box: 2026
+--   PIN Dumbbell Club: 2027
 
 insert into public.sedes (id, slug, name, logo_path, pin_hash) values
   (
@@ -10,14 +10,14 @@ insert into public.sedes (id, slug, name, logo_path, pin_hash) values
     'gym-1',
     'Dumbbell Club',
     '/logos/dumbbell.jpeg',
-    '$2b$10$fO5ue6/vmQ.tfaoYF7kRCuX.5NHvPtmL0IdtgJFCLuWoffzs87nQa'
+    '$2b$10$krrLzeCtoURrhhjCxBv7A.GuU0q8BrNJjPwbgrkkRikGDRLBvGCCm'
   ),
   (
     '22222222-2222-2222-2222-222222222222',
     'gym-2',
     'Personal Box',
     '/logos/personal.jpeg',
-    '$2b$10$BT5vHxZyvztFhHxyZrMZyec3RFHCDsni1Pai6uI711f76rhxd877.'
+    '$2b$10$WLgByfDa6YFRCUBRuYhx2OQ64Egu2OjSHJQYJCGrbZnF4BXaOkDhu'
   )
 on conflict (id) do update set
   name = excluded.name,
@@ -27,15 +27,15 @@ on conflict (id) do update set
 insert into public.admins (id, username, name, password_hash) values
   (
     'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-    'admin1',
-    'Admin 1',
-    '$2b$10$izvJC1.g3nyY7EsTzqVB9.De0i7WUlA.YltE35fN4Q1MUTqT426u2'
+    'personal',
+    'Personal Box Admin',
+    '$2b$10$wosy6gHQPzMqA2if9hicludX0Ff9ybCdNvYfL8BKk1O7g3qWVoI3S'
   ),
   (
     'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-    'admin2',
-    'Admin 2',
-    '$2b$10$izvJC1.g3nyY7EsTzqVB9.De0i7WUlA.YltE35fN4Q1MUTqT426u2'
+    'dumbell',
+    'Dumbbell Club Admin',
+    '$2b$10$bcuA5dplm9yXLbwoWWEfSupxK7afkcb.g.01StmiQ6oLSJu.CfOba'
   )
 on conflict (id) do update set
   username = excluded.username,

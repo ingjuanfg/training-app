@@ -43,10 +43,10 @@ cp .env.example .env.local
 
 | Tipo | Credencial | Acceso |
 |------|------------|--------|
-| Admin | `admin1` / `admin123` | Ambas sedes |
-| Admin | `admin2` / `admin123` | Ambas sedes |
-| PIN TV | `1111` | Dumbbell Club |
-| PIN TV | `2222` | Personal Box |
+| Admin | `personal` / `personal2026` | Ambas sedes |
+| Admin | `dumbell` / `dumbell2026` | Ambas sedes |
+| PIN TV | `2026` | Personal Box |
+| PIN TV | `2027` | Dumbbell Club |
 
 - **Usuario + clave** → panel admin (crea/edita WODs para una o ambas sedes)
 - **PIN** → vista TV del día de esa sede (nombre + logo)
