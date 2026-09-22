@@ -24,7 +24,7 @@ Plataforma para crear y visualizar entrenamientos por sede (admin mobile/laptop 
 
 En **Project Settings → API**, copia:
 
-- Project URL → `NEXT_PUBLIC_SUPABASE_URL`
+- Project URL → `SUPABASE_URL`
 - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (solo servidor)
 
 ### 2. Variables de entorno
@@ -35,7 +35,7 @@ cp .env.example .env.local
 
 | Variable | Dónde obtenerla |
 |----------|-----------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL |
+| `SUPABASE_URL` | Supabase → Settings → API → Project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → `service_role` |
 | `SESSION_SECRET` | String aleatorio ≥ 32 caracteres (`openssl rand -base64 32`) |
 
