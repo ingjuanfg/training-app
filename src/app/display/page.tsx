@@ -18,6 +18,8 @@ export default async function DisplayPage() {
   const today = todayInBogota();
   const workout = await getWorkoutForDate(sede.id, today);
   const sections = workout?.workout_sections ?? [];
+  const introMessage = workout?.intro_message ?? "";
+  const hasContent = sections.length > 0 || introMessage.trim().length > 0;
 
   return (
     <main
@@ -34,7 +36,7 @@ export default async function DisplayPage() {
           alt={sede.name}
           width={240}
           height={240}
-          className="h-14 w-auto max-w-[40vw] object-contain md:h-20 lg:h-24 xl:h-28"
+          className="h-12 w-auto max-w-[34vw] object-contain md:h-16 lg:h-20"
         />
       </div>
 
@@ -43,7 +45,13 @@ export default async function DisplayPage() {
         <LogoutButton className="rounded-lg border border-white/25 bg-white/10 px-3 py-2 text-sm font-medium text-white hover:bg-white/20 md:px-4 md:py-2.5 md:text-base lg:text-lg" />
       </div>
 
-      {sections.length === 0 ? (
+      {hasContent ? (
+        <SectionPager
+          sections={sections}
+          dateLabel={formatDisplayDate(today)}
+          introMessage={introMessage}
+        />
+      ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 pt-24 text-center md:gap-5">
           <p className="font-display text-5xl md:text-7xl lg:text-8xl xl:text-9xl">
             {sede.name}
@@ -58,11 +66,6 @@ export default async function DisplayPage() {
             <p className="text-xl font-bold leading-none md:text-2xl lg:text-3xl">0</p>
           </div>
         </div>
-      ) : (
-        <SectionPager
-          sections={sections}
-          dateLabel={formatDisplayDate(today)}
-        />
       )}
     </main>
   );

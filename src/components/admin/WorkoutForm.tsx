@@ -21,6 +21,7 @@ type Props = {
   sedes: SedeRow[];
   workoutId?: string;
   initialDate?: string;
+  initialIntroMessage?: string;
   initialSections?: WorkoutSection[];
   /** Sede del WOD que se abrió (modo edit). */
   sourceSedeId?: string;
@@ -35,6 +36,7 @@ export function WorkoutForm({
   sedes,
   workoutId,
   initialDate,
+  initialIntroMessage = "",
   initialSections = [],
   sourceSedeId,
   existingSedeIds = [],
@@ -48,6 +50,7 @@ export function WorkoutForm({
     if (mode === "edit" && sourceSedeId) return [sourceSedeId];
     return sedes.map((s) => s.id);
   });
+  const [introMessage, setIntroMessage] = useState(initialIntroMessage);
   const [active, setActive] = useState<SectionType[]>(() =>
     initialSections.length > 0
       ? initialSections.map((s) => s.section_type)
@@ -65,13 +68,14 @@ export function WorkoutForm({
   const payload = useMemo(
     () => ({
       workoutDate,
+      introMessage,
       sedeIds: selectedSedeIds,
       sections: active.map((section_type) => ({
         section_type,
         content: contents[section_type] ?? "",
       })),
     }),
-    [active, contents, selectedSedeIds, workoutDate],
+    [active, contents, introMessage, selectedSedeIds, workoutDate],
   );
 
   const willOverwriteDiverged =
@@ -172,6 +176,17 @@ export function WorkoutForm({
         ) : null}
       </fieldset>
 
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Mensaje inicial
+        <textarea
+          rows={4}
+          value={introMessage}
+          onChange={(e) => setIntroMessage(e.target.value)}
+          className="rounded-lg border border-[var(--line)] bg-white px-3 py-2.5 text-sm leading-relaxed"
+          placeholder="Mensaje del día, objetivo de la semana o un aviso. Si lo dejas vacío, la TV abre en la primera sección."
+        />
+      </label>
+
       <fieldset>
         <legend className="mb-2 text-sm font-medium">
           Secciones del entrenamiento
@@ -191,6 +206,11 @@ export function WorkoutForm({
             </label>
           ))}
         </div>
+        <p className="mt-2 text-xs text-[var(--muted)]">
+          En la TV, líneas como &quot;2 Rondas&quot;, &quot;AMRAP 10 Min&quot; o
+          &quot;FOR TIME 12 Min&quot; se resaltan. El número al inicio de cada
+          ejercicio (10, 8/lado) también.
+        </p>
       </fieldset>
 
       {SECTION_TYPES.filter((t) => active.includes(t)).map((type) => (

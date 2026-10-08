@@ -27,6 +27,7 @@ create table public.workouts (
   workout_date date not null,
   sede_id uuid not null references public.sedes (id) on delete cascade,
   created_by uuid references public.admins (id) on delete set null,
+  intro_message text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (workout_date, sede_id)

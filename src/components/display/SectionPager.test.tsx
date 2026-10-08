@@ -36,4 +36,24 @@ describe("SectionPager", () => {
     await user.click(screen.getByRole("button", { name: "Sección siguiente" }));
     expect(screen.getByText("Fuerza")).toBeInTheDocument();
   });
+
+  it("opens on the intro message when it exists", async () => {
+    const user = userEvent.setup();
+    render(
+      <SectionPager
+        sections={sections}
+        dateLabel="21/07/2026"
+        introMessage="Objetivo de la semana: consistencia."
+      />,
+    );
+
+    expect(screen.getByText("Mensaje del día")).toBeInTheDocument();
+    expect(
+      screen.getByText("Objetivo de la semana: consistencia."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Sección siguiente" }));
+    expect(screen.getByText("Calentamiento")).toBeInTheDocument();
+  });
 });

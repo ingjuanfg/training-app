@@ -9,7 +9,7 @@ import {
 } from "@/lib/types";
 import {
   sectionLabels,
-  sectionsFingerprint,
+  workoutFingerprint,
 } from "@/lib/workouts/fingerprint";
 
 export type SectionInput = {
@@ -18,7 +18,7 @@ export type SectionInput = {
 };
 
 const WORKOUT_SELECT =
-  "id, workout_date, sede_id, created_at, updated_at, workout_sections(id, section_type, content, sort_order), sedes(id, name, logo_path, slug)";
+  "id, workout_date, sede_id, intro_message, created_at, updated_at, workout_sections(id, section_type, content, sort_order), sedes(id, name, logo_path, slug)";
 
 export type ListSummariesOptions = {
   /** Inclusive YYYY-MM-DD */
@@ -80,7 +80,10 @@ function groupWorkoutsIntoDaySummaries(
         sedeName: w.sede?.name ?? "Sede",
         sedeSlug: w.sede?.slug ?? w.sede_id,
         sectionLabels: sectionLabels(w.workout_sections ?? []),
-        fingerprint: sectionsFingerprint(w.workout_sections ?? []),
+        fingerprint: workoutFingerprint(
+          w.intro_message,
+          w.workout_sections ?? [],
+        ),
       }))
       .sort((a, b) => a.sedeName.localeCompare(b.sedeName));
 
@@ -177,6 +180,7 @@ async function insertWorkoutWithSections(params: {
   sedeId: string;
   adminId: string;
   workoutDate: string;
+  introMessage: string;
   sections: SectionInput[];
 }): Promise<string> {
   const supabase = getSupabaseAdmin();
@@ -186,6 +190,7 @@ async function insertWorkoutWithSections(params: {
       workout_date: params.workoutDate,
       sede_id: params.sedeId,
       created_by: params.adminId,
+      intro_message: params.introMessage.trim() || null,
     })
     .select("id")
     .single();
@@ -207,6 +212,7 @@ export async function createWorkoutsForSedes(params: {
   sedeIds: string[];
   adminId: string;
   workoutDate: string;
+  introMessage: string;
   sections: SectionInput[];
 }): Promise<string[]> {
   const ids: string[] = [];
@@ -215,6 +221,7 @@ export async function createWorkoutsForSedes(params: {
       sedeId,
       adminId: params.adminId,
       workoutDate: params.workoutDate,
+      introMessage: params.introMessage,
       sections: params.sections,
     });
     ids.push(id);
@@ -231,6 +238,7 @@ export async function applyWorkoutToSedes(params: {
   targetSedeIds: string[];
   adminId: string;
   workoutDate: string;
+  introMessage: string;
   sections: SectionInput[];
 }): Promise<void> {
   const source = await getWorkoutById(params.sourceWorkoutId);
@@ -268,6 +276,7 @@ export async function applyWorkoutToSedes(params: {
         .from("workouts")
         .update({
           workout_date: params.workoutDate,
+          intro_message: params.introMessage.trim() || null,
           updated_at: new Date().toISOString(),
         })
         .eq("id", targetId);
@@ -279,6 +288,7 @@ export async function applyWorkoutToSedes(params: {
         sedeId,
         adminId: params.adminId,
         workoutDate: params.workoutDate,
+        introMessage: params.introMessage,
         sections: params.sections,
       });
     }
@@ -303,6 +313,7 @@ function normalizeWorkout(row: {
   id: string;
   workout_date: string;
   sede_id: string;
+  intro_message?: string | null;
   created_at: string;
   updated_at: string;
   workout_sections?: WorkoutSection[] | null;
@@ -320,6 +331,7 @@ function normalizeWorkout(row: {
     id: row.id,
     workout_date: row.workout_date,
     sede_id: row.sede_id,
+    intro_message: row.intro_message?.trim() ? row.intro_message : null,
     created_at: row.created_at,
     updated_at: row.updated_at,
     workout_sections: sections,

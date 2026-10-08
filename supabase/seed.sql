@@ -9,14 +9,14 @@ insert into public.sedes (id, slug, name, logo_path, pin_hash) values
     '11111111-1111-1111-1111-111111111111',
     'gym-1',
     'Dumbbell Club',
-    '/logos/dumbbell.jpeg',
+    '/logos/dumbbell.png',
     '$2b$10$krrLzeCtoURrhhjCxBv7A.GuU0q8BrNJjPwbgrkkRikGDRLBvGCCm'
   ),
   (
     '22222222-2222-2222-2222-222222222222',
     'gym-2',
     'Personal Box',
-    '/logos/personal.jpeg',
+    '/logos/personal.png',
     '$2b$10$WLgByfDa6YFRCUBRuYhx2OQ64Egu2OjSHJQYJCGrbZnF4BXaOkDhu'
   )
 on conflict (id) do update set

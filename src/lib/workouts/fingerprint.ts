@@ -10,6 +10,13 @@ export function sectionsFingerprint(
     .join("\n---\n");
 }
 
+export function workoutFingerprint(
+  introMessage: string | null | undefined,
+  sections: Pick<WorkoutSection, "section_type" | "content" | "sort_order">[],
+): string {
+  return `intro:${(introMessage ?? "").trim()}\n===\n${sectionsFingerprint(sections)}`;
+}
+
 export function sectionLabels(
   sections: Pick<WorkoutSection, "section_type" | "sort_order">[],
 ): string[] {
