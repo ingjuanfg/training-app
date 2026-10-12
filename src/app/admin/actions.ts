@@ -10,7 +10,7 @@ import {
   getWorkoutById,
   getWorkoutsForDate,
 } from "@/lib/workouts/repository";
-import { sectionsFingerprint } from "@/lib/workouts/fingerprint";
+import { workoutFingerprint } from "@/lib/workouts/fingerprint";
 
 export type ActionResult =
   | { ok: true; id?: string; warn?: string }
@@ -47,6 +47,7 @@ export async function createWorkoutAction(
       sedeIds: parsed.data.sedeIds,
       adminId: session.adminId,
       workoutDate: parsed.data.workoutDate,
+      introMessage: parsed.data.introMessage,
       sections: parsed.data.sections,
     });
 
@@ -84,7 +85,7 @@ export async function updateWorkoutAction(
       parsed.data.sedeIds.includes(w.sede_id),
     );
     const fingerprints = targets.map((w) =>
-      sectionsFingerprint(w.workout_sections ?? []),
+      workoutFingerprint(w.intro_message, w.workout_sections ?? []),
     );
     const diverged =
       fingerprints.length >= 2 &&
@@ -95,6 +96,7 @@ export async function updateWorkoutAction(
       targetSedeIds: parsed.data.sedeIds,
       adminId: session.adminId,
       workoutDate: parsed.data.workoutDate,
+      introMessage: parsed.data.introMessage,
       sections: parsed.data.sections,
     });
 

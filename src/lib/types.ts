@@ -48,6 +48,7 @@ export type Workout = {
   id: string;
   workout_date: string;
   sede_id: string;
+  intro_message: string | null;
   created_at: string;
   updated_at: string;
   workout_sections?: WorkoutSection[];

@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { WorkoutForm } from "@/components/admin/WorkoutForm";
 import { getSession } from "@/lib/auth/session";
 import { listSedes } from "@/lib/sedes/repository";
-import { sectionsFingerprint } from "@/lib/workouts/fingerprint";
+import { workoutFingerprint } from "@/lib/workouts/fingerprint";
 import {
   getWorkoutById,
   getWorkoutsForDate,
@@ -27,7 +27,7 @@ export default async function EditWorkoutPage({ params }: Props) {
   ]);
 
   const fingerprints = dayWorkouts.map((w) =>
-    sectionsFingerprint(w.workout_sections ?? []),
+    workoutFingerprint(w.intro_message, w.workout_sections ?? []),
   );
   const dayContentDiverged =
     fingerprints.length >= 2 &&
@@ -53,6 +53,7 @@ export default async function EditWorkoutPage({ params }: Props) {
         sedes={sedes}
         workoutId={workout.id}
         initialDate={workout.workout_date}
+        initialIntroMessage={workout.intro_message ?? ""}
         initialSections={workout.workout_sections ?? []}
         sourceSedeId={workout.sede_id}
         existingSedeIds={dayWorkouts.map((w) => w.sede_id)}

@@ -17,6 +17,7 @@ export const pinLoginSchema = z.object({
 
 export const workoutFormSchema = z.object({
   workoutDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  introMessage: z.string().trim().max(2000).optional().default(""),
   sedeIds: z
     .array(z.string().min(1))
     .min(1, "Selecciona al menos una sede"),
